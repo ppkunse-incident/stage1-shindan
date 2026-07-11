@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import type { LevelResult } from '../data/results'
 import { DISCLAIMER } from '../data/results'
 import { NOTE_URL, X_FOLLOW_URL } from '../config'
+import { trackResultView } from '../analytics'
 
 interface Props {
   result: LevelResult
@@ -8,6 +10,10 @@ interface Props {
 }
 
 export function ResultScreen({ result, onRestart }: Props) {
+  useEffect(() => {
+    trackResultView(result.level)
+  }, [result.level])
+
   const siteUrl = `${window.location.origin}${window.location.pathname}`
   const shareText = `私は Lv${result.level} ${result.name} でした`
   const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(siteUrl)}`
